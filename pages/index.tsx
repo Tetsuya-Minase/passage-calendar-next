@@ -1,65 +1,43 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React, { useCallback, useState } from 'react';
+import { InputForm } from '../src/components/InputForm';
+import { Dl } from '../src/common/molecules/descriptionList/DescriptionList';
+import { FirebaseAuth, signInWithRedirect, signOut } from '../src/common/functions/firebase/FirebaseAuth';
+import { CalendarComponent } from '../src/components/calendar/Calendar';
+import { FormStateContext, SetFormStateContext, initialState } from '../src/common/context/FormStateContext';
+import { Button } from '../src/common/atoms/button/Button';
+import styled from 'styled-components';
+import { GetServerSideProps } from 'next';
 
-export default function Home() {
+const Wrapper = styled.div`
+  padding: 0.5rem 1rem;
+`;
+
+export default function Index() {
+  const NotSignedIn = useCallback(() => {
+    return <Button text="sign in" click={() => signInWithRedirect()} size='small'/>;
+  }, []);
+  const Loading = useCallback(() => {
+    return <div>loading now....</div>;
+  }, []);
+  const [formState, setFormState] = useState(initialState);
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Wrapper>
+      <FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}>
+        <Button text="sign out" click={signOut} size='small'/>
+        <FormStateContext.Provider value={formState}>
+          <SetFormStateContext.Provider value={setFormState}>
+            <InputForm/>
+            <Dl/>
+            <CalendarComponent/>
+          </SetFormStateContext.Provider>
+        </FormStateContext.Provider>
+      </FirebaseAuth>
+    </Wrapper>
+  );
+};
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
-}
+// export const getServerSideProps: GetServerSideProps = async (context) => ({
+//   props: {
+//    
+//   }
+// });
