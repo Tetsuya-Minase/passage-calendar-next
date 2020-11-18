@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { firebase, FirebaseContext } from './Firebase';
+import { Nullable } from '../../../../types/util';
 
 const useFirebaseAuth = () => {
   const [initialized, setInitialized] = useState(false);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<Nullable<string>>(null);
   const [userName, setUserName] = useState('');
   useEffect(() => {
     try {

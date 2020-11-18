@@ -3,12 +3,11 @@ import { firebase, FirebaseContext } from './Firebase';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FormState, FormValue } from '../../context/FormStateContext';
 
-const useDocRef = () => {
+function useDocRef() {
   const { userId } = useContext(FirebaseContext);
   return useMemo((): firebase.database.Reference => {
     return firebase.database().ref(`/${userId}`);
   }, [userId]);
-
 };
 function useFetchDocument<T>(ref: firebase.database.Reference) {
   const [document, setDocument] = useState<T>();
@@ -63,6 +62,8 @@ function useUpdateDocument<T = any>(ref: firebase.database.Reference) {
         setPending(true);
         ref.set(document).then(() => {
           setPending(false);
+        }).catch(e => {
+          console.error('update error: ', e);
         });
         timerRef.current = undefined;
       }, 500);
