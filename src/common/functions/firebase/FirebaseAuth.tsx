@@ -33,11 +33,7 @@ export const FirebaseAuth: React.FC<FirebaseAuthProps> = (
     Loading
   }
 ): JSX.Element => {
-  console.log('in FirebaseAuth');
   const { initialized, userId, userName } = useFirebaseAuth();
-  console.log('initialized: ', initialized);
-  console.log('userId: ', userId);
-  console.log('userName: ', userName);
   if (!initialized) {
     return <Loading/>;
   } else if (!userId) {
