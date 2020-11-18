@@ -7,11 +7,15 @@ const useFirebaseAuth = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState('');
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(async user => {
-      setInitialized(true);
-      setUserId(user ? user.uid : null);
-      setUserName(user ? user.displayName || '' : '');
-    });
+    try {
+      firebase.auth().onAuthStateChanged(async user => {
+        setInitialized(true);
+        setUserId(user?.uid || null);
+        setUserName(user?.displayName || '');
+      });
+    } catch (e) {
+      console.error('auth error: ', e);
+    }
   }, []);
 
   return { initialized, userId, userName };
@@ -25,11 +29,15 @@ type FirebaseAuthProps = {
 export const FirebaseAuth: React.FC<FirebaseAuthProps> = (
   {
     children,
-    NotSignedIn ,
+    NotSignedIn,
     Loading
   }
 ): JSX.Element => {
+  console.log('in FirebaseAuth');
   const { initialized, userId, userName } = useFirebaseAuth();
+  console.log('initialized: ', initialized);
+  console.log('userId: ', userId);
+  console.log('userName: ', userName);
   if (!initialized) {
     return <Loading/>;
   } else if (!userId) {
@@ -40,7 +48,7 @@ export const FirebaseAuth: React.FC<FirebaseAuthProps> = (
         value={{ userId, userName }}
         children={children}
       />
-  );
+    );
   }
 };
 

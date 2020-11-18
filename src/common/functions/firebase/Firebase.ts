@@ -14,7 +14,10 @@ const config = {
 };
 
 if (firebase.apps.length === 0) {
+  console.log('initialize firebaseApp: ', config);
   firebase.initializeApp(config);
+} else {
+  console.log('already exist');
 }
 
 export { firebase };

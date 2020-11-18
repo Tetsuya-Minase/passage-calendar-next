@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import { InputForm } from './components/InputForm';
-import { Dl } from './common/molecules/descriptionList/DescriptionList';
-import { FirebaseAuth, signInWithRedirect, signOut } from './common/functions/firebase/FirebaseAuth';
-import { CalendarComponent } from './components/calendar/Calendar';
-import { FormStateContext, SetFormStateContext, initialState } from './common/context/FormStateContext';
-import { Button } from './common/atoms/button/Button';
+import { InputForm } from '../src/components/InputForm';
+import { Dl } from '../src/common/molecules/descriptionList/DescriptionList';
+import { FirebaseAuth, signInWithRedirect, signOut } from '../src/common/functions/firebase/FirebaseAuth';
+import { CalendarComponent } from '../src/components/calendar/Calendar';
+import { FormStateContext, SetFormStateContext, initialState } from '../src/common/context/FormStateContext';
+import { Button } from '../src/common/atoms/button/Button';
 import styled from 'styled-components';
+import { GetServerSideProps } from 'next';
 
 const Wrapper = styled.div`
   padding: 0.5rem 1rem;
@@ -21,7 +22,7 @@ export default function Index() {
   const [formState, setFormState] = useState(initialState);
   return (
     <Wrapper>
-      {/*<FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}>*/}
+      <FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}>
         <Button text="sign out" click={signOut} size='small'/>
         <FormStateContext.Provider value={formState}>
           <SetFormStateContext.Provider value={setFormState}>
@@ -30,7 +31,13 @@ export default function Index() {
             <CalendarComponent/>
           </SetFormStateContext.Provider>
         </FormStateContext.Provider>
-      {/*</FirebaseAuth>*/}
+      </FirebaseAuth>
     </Wrapper>
   );
 };
+
+// export const getServerSideProps: GetServerSideProps = async (context) => ({
+//   props: {
+//    
+//   }
+// });
