@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import 'react-calendar/dist/Calendar.css';
-import './Calendar.css';
 import { useAllDocuments } from '../../common/functions/firebase/FirebaseDataBase';
 import { FormState, FormValue, useFormStateContext, useSetFormStateContext } from '../../common/context/FormStateContext';
 import { Heading } from '../../common/atoms/heading/Heading';

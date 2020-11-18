@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   padding: 0.5rem 1rem;
 `;
 
-export const Top = () => {
+export default function Index() {
   const NotSignedIn = useCallback(() => {
     return <Button text="sign in" click={() => signInWithRedirect()} size='small'/>;
   }, []);
@@ -21,7 +21,7 @@ export const Top = () => {
   const [formState, setFormState] = useState(initialState);
   return (
     <Wrapper>
-      <FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}>
+      {/*<FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}>*/}
         <Button text="sign out" click={signOut} size='small'/>
         <FormStateContext.Provider value={formState}>
           <SetFormStateContext.Provider value={setFormState}>
@@ -30,7 +30,7 @@ export const Top = () => {
             <CalendarComponent/>
           </SetFormStateContext.Provider>
         </FormStateContext.Provider>
-      </FirebaseAuth>
+      {/*</FirebaseAuth>*/}
     </Wrapper>
   );
 };

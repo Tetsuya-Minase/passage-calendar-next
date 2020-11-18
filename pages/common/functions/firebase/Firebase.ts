@@ -1,4 +1,4 @@
-import {createContext} from 'react';
+import { createContext } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
@@ -13,8 +13,11 @@ const config = {
   appId: process.env.REACT_APP_APP_ID
 };
 
-firebase.initializeApp(config);
-export {firebase};
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(config);
+}
+
+export { firebase };
 
 type FirebaseContext = {
   userId: string | null;
