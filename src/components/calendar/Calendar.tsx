@@ -3,8 +3,9 @@ import Calendar from 'react-calendar';
 import styled from 'styled-components';
 import 'react-calendar/dist/Calendar.css';
 import { useAllDocuments } from '../../common/functions/firebase/FirebaseDataBase';
-import { FormState, FormValue, useFormStateContext, useSetFormStateContext } from '../../common/context/FormStateContext';
 import { Heading } from '../../common/atoms/heading/Heading';
+import { useRecoilState } from 'recoil';
+import { FormState, formState, FormValue } from '../../common/store';
 
 const CalendarWrapper = styled.div`
   align-items: center;
@@ -15,23 +16,22 @@ const CalendarWrapper = styled.div`
 
 export const CalendarComponent: React.FC = () => {
   const { document } = useAllDocuments();
-  const formState = useFormStateContext();
-  const setFormState = useSetFormStateContext();
+  const [state, setState] = useRecoilState(formState);
   const documentValues = useMemo(() => {
     return Object.values(document || {});
   }, [document]);
   useEffect(() => {
     const initialFormState: FormState = {
-      list: [...formState.list, ...documentValues].reduce((list: FormValue[], formValue: FormValue) => {
+      list: [...state.list, ...documentValues].reduce((list: FormValue[], formValue: FormValue) => {
         if (!list.map(item => `${item.value}${item.date}`).includes(`${formValue.value}${formValue.date}`)) {
           return [...list, formValue];
         }
         return list;
       }, [])
     };
-    setFormState(initialFormState);
+    setState(initialFormState);
   }, [documentValues]);
-  const tileContent = Object.fromEntries(formState.list.map(({ date, value }) => [new Date(date).toDateString(), value]));
+  const tileContent = Object.fromEntries(state.list.map(({ date, value }) => [new Date(date).toDateString(), value]));
   const tileValue = useCallback(({ date }) => {
     const dateKey = date.toDateString();
     return tileContent[dateKey] ? <p>{tileContent[dateKey]}</p> : null;
