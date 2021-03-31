@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, VFC } from 'react';
 
 import { firebase, FirebaseState } from './Firebase';
 import { useRecoilState } from 'recoil';
@@ -21,23 +21,25 @@ const useFirebaseAuth = (): {initialized: boolean, userId: Nullable<string>, use
 };
 
 interface FirebaseAuthProps {
-  readonly NotSignedIn: React.FC;
-  readonly Loading: React.FC;
+  readonly Login: VFC;
+  readonly Loading: VFC;
+  readonly Logout: VFC;
 }
 
 export const FirebaseAuth: React.FC<FirebaseAuthProps> = (
   {
-    NotSignedIn,
-    Loading
+    Login,
+    Loading,
+    Logout
   }
 ): JSX.Element | null => {
-  const { initialized, userId, userName } = useFirebaseAuth();
+  const { initialized, userId } = useFirebaseAuth();
   if (!initialized) {
     return <Loading/>;
   } else if (!userId) {
-    return <NotSignedIn/>;
+    return <Login/>;
   } else {
-    return null;
+    return <Logout/>;
   }
 };
 
