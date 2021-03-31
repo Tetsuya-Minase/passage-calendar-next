@@ -1,8 +1,8 @@
-import { createContext } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import { Nullable } from '../../../../types/util';
+import { atom, selector } from 'recoil';
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -19,12 +19,17 @@ if (firebase.apps.length === 0) {
 }
 export { firebase };
 
-type FirebaseContext = {
+interface _FirebaseState {
   userId: Nullable<string>;
-  userName: string;
+  userName: Nullable<string>;
 }
+export type FirebaseState = Readonly<_FirebaseState>;
 
-export const FirebaseContext = createContext<FirebaseContext>({
-  userId: null,
-  userName: ''
+export const FirebaseState = atom<FirebaseState>({
+  key: 'FirebaseState',
+  default: {userId: null, userName: null}
+});
+export const FirebaseStateUserId = selector({
+  key: 'FirebaseStateUserId',
+  get: ({get}) => get(FirebaseState).userId
 });

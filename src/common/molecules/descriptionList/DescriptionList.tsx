@@ -1,11 +1,12 @@
 import React from 'react';
-import { useFormStateContext } from '../../context/FormStateContext';
 import { Heading } from '../../atoms/heading/Heading';
 import { Description, DescriptionList, DescriptionTerm, Wrapper } from './DescriptionListStyles';
 import { useCalculatePassage } from './DescriptionUseCase';
+import { useRecoilState } from 'recoil';
+import { formState } from '../../store';
 
 export const Dl: React.FC = () => {
-  const items = useFormStateContext();
+  const [state, ] = useRecoilState(formState);
   return (
     <section>
       <Heading text="登録データ" level={1} position="center" />
@@ -16,7 +17,7 @@ export const Dl: React.FC = () => {
             <DescriptionTerm>登録日</DescriptionTerm>
             <DescriptionTerm>経過日数</DescriptionTerm>
           </DescriptionList>
-          {items.list.map(({ value, date }) => (
+          {state.list.map(({ value, date }) => (
             <DescriptionList key={`${value}:${date}`}>
               <Description>{value}</Description>
               <Description>{date}</Description>
