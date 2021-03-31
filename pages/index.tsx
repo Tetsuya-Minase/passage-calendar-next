@@ -21,12 +21,11 @@ export default function Index() {
   return (
     <RecoilRoot>
       <Wrapper>
-        <FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}>
-          <Button text="sign out" click={signOut} size='small'/>
-          <InputForm/>
-          <Dl/>
-          <CalendarComponent/>
-        </FirebaseAuth>
+        <FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}/>
+        <Button text="sign out" click={signOut} size='small'/>
+        <InputForm/>
+        <Dl/>
+        <CalendarComponent/>
       </Wrapper>
     </RecoilRoot>
   );

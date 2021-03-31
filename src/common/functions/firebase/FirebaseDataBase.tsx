@@ -1,10 +1,11 @@
 
-import { firebase, FirebaseContext } from './Firebase';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { firebase, FirebaseStateUserId } from './Firebase';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FormState, FormValue } from '../../store';
+import { useRecoilValue } from 'recoil';
 
 function useDocRef() {
-  const { userId } = useContext(FirebaseContext);
+  const userId = useRecoilValue(FirebaseStateUserId);
   return useMemo((): firebase.database.Reference => {
     return firebase.database().ref(`/${userId}`);
   }, [userId]);

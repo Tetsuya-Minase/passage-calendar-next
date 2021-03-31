@@ -1,51 +1,43 @@
 import React, { useEffect, useState } from 'react';
 
-import { firebase, FirebaseContext } from './Firebase';
+import { firebase, FirebaseState } from './Firebase';
+import { useRecoilState } from 'recoil';
 import { Nullable } from '../../../../types/util';
 
-const useFirebaseAuth = () => {
+const useFirebaseAuth = (): {initialized: boolean, userId: Nullable<string>, userName: Nullable<string>} => {
   const [initialized, setInitialized] = useState(false);
-  const [userId, setUserId] = useState<Nullable<string>>(null);
-  const [userName, setUserName] = useState('');
+  const [firebaseState, setFirebaseState] = useRecoilState<FirebaseState>(FirebaseState);
   useEffect(() => {
     try {
       firebase.auth().onAuthStateChanged(async user => {
         setInitialized(true);
-        setUserId(user?.uid || null);
-        setUserName(user?.displayName || '');
+        setFirebaseState({ userId: user?.uid ?? null, userName: user?.displayName ?? null });
       });
     } catch (e) {
       console.error('auth error: ', e);
     }
   }, []);
-
-  return { initialized, userId, userName };
+  return { initialized, userId: firebaseState.userId, userName: firebaseState.userName};
 };
 
-type FirebaseAuthProps = {
-  NotSignedIn: React.FC;
-  Loading: React.FC;
+interface FirebaseAuthProps {
+  readonly NotSignedIn: React.FC;
+  readonly Loading: React.FC;
 }
 
 export const FirebaseAuth: React.FC<FirebaseAuthProps> = (
   {
-    children,
     NotSignedIn,
     Loading
   }
-): JSX.Element => {
+): JSX.Element | null => {
   const { initialized, userId, userName } = useFirebaseAuth();
   if (!initialized) {
     return <Loading/>;
   } else if (!userId) {
     return <NotSignedIn/>;
   } else {
-    return (
-      <FirebaseContext.Provider
-        value={{ userId, userName }}
-        children={children}
-      />
-    );
+    return null;
   }
 };
 
